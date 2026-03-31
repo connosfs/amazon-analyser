@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Amazon Spending Analysis / Ausgaben-Analyse",
+  "version": "5.5.0",
+  "description": "Analyze your Amazon spending – scrape orders, export CSV, charts & reports. / Amazon-Ausgaben analysieren.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["https://www.amazon.de/*", "https://www.amazon.com/*", "https://www.amazon.at/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.amazon.de/gp/your-account/order-history*",
+        "https://www.amazon.de/your-orders/*",
+        "https://www.amazon.com/gp/your-account/order-history*",
+        "https://www.amazon.com/your-orders/*",
+        "https://www.amazon.at/gp/your-account/order-history*",
+        "https://www.amazon.at/your-orders/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [{
+    "resources": ["dashboard.html"],
+    "matches": ["<all_urls>"]
+  }],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

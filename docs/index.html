@@ -1,0 +1,513 @@
+
+Alle Projekte
+Amazon Ausgabenanalyse
+
+
+
+Wie kann ich dir heute helfen?
+
+Du hast dein Ausgabenlimit für zusätzliche Nutzung erreicht ∙ Dein Limit wird um 16:00 zurückgesetzt
+Mehr kaufen
+
+Starte eine Aufgabe in Cowork
+Website für App mit Datenschutzrichtlinie
+Letzte Nachricht vor 1 Stunde
+App-Entwicklung anfordern
+Letzte Nachricht vor 3 Stunden
+Automatische app-kategorisierung optimieren
+Letzte Nachricht vor 3 Stunden
+Chrome-Erweiterung im Store veröffentlichen
+Letzte Nachricht vor 17 Stunden
+Speicher
+Nur du
+Purpose & context Falk is building and publishing a Chrome browser extension called "Amazon Ausgaben-Analyse" / "Amazon Order Analyser" — a tool that scrapes Amazon.de order history, auto-categorizes purchases into 25+ categories, and visualizes spending data in a local dashboard. All data stays in the browser with no external transmission. The project has evolved through multiple versions (v1.0 → v5.3+), with ongoing refinement of categorization accuracy, UI features, and store readiness. Current state Latest stable version is v5.3, with v4.6 categorization logic (scoring-based algorithm, ~1,114 keywords, 25+ categories including Auto & Motorrad, Büro & Schreibwaren, Haustier, Abo & Digital, Küche & Haushalt, Geschenke & Gutscheine) Extension is being prepared for Chrome Web Store submission: store descriptions (DE/EN), icons (all required sizes), screenshots (1280×800 px), privacy policy (bilingual HTML for GitHub Pages), permission justifications, and single-purpose statement are all completed A PayPal donation link (https://www.paypal.com/donate/?hostedbuttonid=LBAGVGGLPXMYQ) is integrated throughout the app (banner, import tab, popup button, PDF footer QR code) Key learnings & principles Chrome Extension CSP blocks inline scripts — all JS must be in external files (dashboard.js, dashboard.css, i18n.js, popup.js) chrome-extension:// URLs are inaccessible to browser automation tools; all debugging must be done via code inspection and console error reporting sed replacements fail inside single-quoted HTML builder strings when inserting double-quoted function calls — use strreplace instead Manually overridden categories must be protected via a userCat flag to prevent auto-recategorization from overwriting them Icons must be real RGBA PNG with transparent backgrounds, not JPEG renamed to .png; 4× supersampling with LANCZOS downscaling eliminates pixelation Chrome Web Store manifest descriptions have a 132-character limit Approach & patterns Falk's strong preference: deliver packaged ZIP files immediately after each change, with version numbers bumped consistently across all files (manifest.json, HTML titles, JS comments, UI labels) so the correct version can be verified on load Falk prefers Claude to make design decisions autonomously (e.g., export button placement, chart type selection) rather than asking for input All source files use bilingual header comments (DE/EN); a README.txt in both languages is included at the top level of each ZIP Full DE/EN bilingual support is implemented via a dedicated i18n.js with browser language auto-detection and a manual toggle in the dashboard header Tools & resources Languages/tech: JavaScript (vanilla), HTML/CSS, Chrome Extensions Manifest V3, Canvas API Export: Custom-built XLSX (ZIP + XML, no external libraries) and HTML print-to-PDF Image processing: Python 3 with Pillow (icon generation, screenshot resizing) File operations: bashtool with sed, grep, strreplace Hosting: GitHub Pages (for privacy policy) Distribution: Chrome Web Store (Productivity category)
+
+Zuletzt aktualisiert vor 3 Stunden
+
+Anweisungen
+Anweisungen hinzufügen, um Claudes Antworten anzupassen
+
+Dateien
+1% der Projektkapazität verwendet
+
+index.html
+470 Zeilen
+
+html
+
+
+
+index.html
+44.35 KB •470 Zeilen
+•
+Die Formatierung kann von der Quelle abweichen
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon Ausgaben-Analyse – Chrome Extension</title>
+<meta name="description" content="Analysiere deine Amazon-Ausgaben lokal im Browser. Kategorisierung, Charts, Excel- & PDF-Export. 100% offline, 100% privat.">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA6UlEQVR4nO2XwQ2DMAxF7ahb5NAN6BhsEsZAjFE2YYyyQQ+ZIz0FOY4piCZGqvin5IN4H8shBEFQeEKQ/F+FHWDmaYC/BTHacM4y2nAewmzdWFuo9fZ2aJax7+dlfNOCUyidl6+AC1MCt4+WwnmIsj3A4Ht0ehNWD+D9a6INCJA2pEoT+n4WV4EdGp0AFMp1LIAL72Q+4v3IY46tAg5f83bq/1fBFWBL8ipwbHsYsz+pYsorwOFrXrUAyroCXAHODyAdl7SEHWBeAemjQz1p643eiK1wLfdoiDjQPh3FyhtuaMIBQIZqHs8/HSxQqagCh/oAAAAASUVORK5CYII=">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0B0E11;--bg-card:#131820;--bg-card-hover:#1A2230;--surface:#182030;--border:rgba(255,255,255,0.06);--border-accent:rgba(76,158,235,0.25);--text:#E8ECF1;--text-muted:#8694A8;--text-dim:#5A6A80;--accent:#4C9EEB;--accent-glow:rgba(76,158,235,0.15);--green:#2D9D78;--orange:#E8723A;--pink:#E85D75;--purple:#9B6CD1;--gold:#D4A843;--radius:12px;--radius-lg:20px;--font:'DM Sans',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+a{color:var(--accent);text-decoration:none;transition:color .2s}a:hover{color:#6DB5F5}
+.badge{display:inline-block;padding:5px 14px;border-radius:100px;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1px solid}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+h2{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;line-height:1.2;margin-bottom:16px}
+.section-desc{color:var(--text-muted);font-size:1.05rem;max-width:600px;margin-bottom:48px}
+section{padding:100px 0}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,14,17,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem;color:var(--text)}
+.nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--green));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--text-muted);font-size:.85rem;font-weight:500;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:8px 20px;background:var(--accent);color:#fff!important;border-radius:8px;font-size:.8rem;font-weight:600;transition:transform .2s,box-shadow .2s}.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(76,158,235,.3);color:#fff!important}
+.lang-toggle{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0}
+.lang-toggle button{padding:5px 10px;font-size:.72rem;font-weight:600;font-family:var(--font);border:none;background:transparent;color:var(--text-dim);cursor:pointer;transition:all .2s;letter-spacing:.03em}
+.lang-toggle button.active{background:var(--accent);color:#fff}
+.lang-toggle button:not(.active):hover{color:var(--text-muted);background:rgba(255,255,255,.04)}
+.nav-mobile-toggle{display:none;background:none;border:none;color:var(--text);cursor:pointer}
+.hero{padding:160px 0 100px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(76,158,235,.08) 0%,transparent 70%);pointer-events:none}
+.hero .container{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.hero-badge{background:var(--accent-glow);border-color:var(--border-accent);color:var(--accent);margin-bottom:28px}
+.hero h1{font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:700;line-height:1.1;max-width:800px;margin-bottom:20px;letter-spacing:-.02em}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:var(--text-muted);font-size:1.15rem;max-width:560px;margin-bottom:40px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent);color:#fff;border-radius:10px;font-size:.95rem;font-weight:600;transition:all .25s;border:none;cursor:pointer}.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(76,158,235,.35);color:#fff}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:.95rem;font-weight:500;transition:all .25s;cursor:pointer}.btn-secondary:hover{background:var(--bg-card-hover);border-color:rgba(255,255,255,.1);color:var(--text)}
+.hero-screenshot{margin-top:64px;width:100%;max-width:960px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.03)}
+.screenshot-placeholder{width:100%;aspect-ratio:16/9;background:var(--bg-card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text-dim);font-size:.85rem}
+.screenshot-placeholder .icon{font-size:2.5rem;opacity:.3}
+.screenshot-placeholder .label{font-family:var(--mono);font-size:.7rem;color:var(--text-dim);background:rgba(255,255,255,.04);padding:4px 12px;border-radius:6px}
+.trust-bar{padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.trust-bar .container{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:.85rem;font-weight:500}
+.trust-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.features{background:var(--bg)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;transition:all .3s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-accent,var(--accent));opacity:0;transition:opacity .3s}
+.feature-card:hover{border-color:rgba(255,255,255,.1);background:var(--bg-card-hover);transform:translateY(-2px)}.feature-card:hover::before{opacity:1}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:20px;background:var(--icon-bg,var(--accent-glow))}
+.feature-card h3{font-size:1.05rem;font-weight:600;margin-bottom:8px}.feature-card p{color:var(--text-muted);font-size:.88rem;line-height:1.6}
+.showcase-section{padding:80px 0}.showcase-section:nth-child(even){background:var(--bg-card)}
+.showcase-row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.showcase-row.reverse{direction:rtl}.showcase-row.reverse>*{direction:ltr}
+.showcase-text .section-label{margin-bottom:8px}
+.showcase-text h3{font-size:1.6rem;font-weight:700;margin-bottom:14px;line-height:1.25}
+.showcase-text p{color:var(--text-muted);font-size:.95rem;margin-bottom:20px;line-height:1.7}
+.showcase-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.showcase-list li{display:flex;align-items:flex-start;gap:10px;color:var(--text-muted);font-size:.88rem}
+.showcase-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.showcase-screenshot{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.use-cases{background:var(--bg)}
+.use-cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.use-case-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;display:flex;gap:20px;transition:all .3s}.use-case-card:hover{border-color:rgba(255,255,255,.1);background:var(--bg-card-hover)}
+.use-case-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;background:rgba(76,158,235,.08)}
+.use-case-card h3{font-size:1rem;font-weight:600;margin-bottom:6px}.use-case-card p{color:var(--text-muted);font-size:.85rem;line-height:1.6}
+.categories{background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.categories .container{text-align:center}.categories .section-desc{margin-left:auto;margin-right:auto}
+.cat-cloud{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:800px;margin:0 auto}
+.cat-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;font-size:.82rem;font-weight:500;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);transition:all .3s}.cat-chip:hover{border-color:rgba(255,255,255,.15);color:var(--text);transform:translateY(-1px)}
+.legal-content{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:48px;max-width:800px;margin:0 auto}
+.legal-content h3{font-size:1.2rem;font-weight:600;margin-top:32px;margin-bottom:10px;color:var(--text)}.legal-content h3:first-child{margin-top:0}
+.legal-content p,.legal-content ul{color:var(--text-muted);font-size:.9rem;line-height:1.7;margin-bottom:12px}
+.legal-content ul{list-style:none;padding-left:0}.legal-content ul li{padding-left:20px;position:relative;margin-bottom:6px}.legal-content ul li::before{content:'—';position:absolute;left:0;color:var(--text-dim)}
+.cta-section{padding:100px 0;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;bottom:-300px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(45,157,120,.06) 0%,transparent 70%);pointer-events:none}
+.cta-section h2{margin-bottom:14px}.cta-section .section-desc{margin-left:auto;margin-right:auto;margin-bottom:32px}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+footer{padding:40px 0;border-top:1px solid var(--border)}
+footer .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-text{color:var(--text-dim);font-size:.8rem}
+.footer-links{display:flex;gap:24px;list-style:none}.footer-links a{color:var(--text-dim);font-size:.8rem;transition:color .2s}.footer-links a:hover{color:var(--text-muted)}
+@media(max-width:900px){.features-grid{grid-template-columns:1fr 1fr}.showcase-row{grid-template-columns:1fr;gap:40px}.showcase-row.reverse{direction:ltr}.use-cases-grid{grid-template-columns:1fr}.nav-links{display:none}.nav-mobile-toggle{display:block}}
+@media(max-width:600px){.features-grid{grid-template-columns:1fr}.hero h1{font-size:2rem}.trust-bar .container{gap:24px}.legal-content{padding:28px 20px}section{padding:64px 0}}
+.steps{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;max-width:900px;margin:0 auto}
+.step{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;min-width:90px;position:relative}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step-icon{font-size:1.6rem}
+.step-text{font-size:.78rem;color:var(--text-muted);font-weight:500;text-align:center;line-height:1.3}
+.step-arrow{color:var(--text-dim);font-size:1.2rem;font-weight:300;flex-shrink:0}
+@media(max-width:700px){.step-arrow{display:none}.steps{gap:4px}.step{min-width:70px;padding:10px 6px}.step-icon{font-size:1.3rem}.step-text{font-size:.7rem}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{opacity:0;animation:fadeInUp .6s ease forwards}.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA6UlEQVR4nO2XwQ2DMAxF7ahb5NAN6BhsEsZAjFE2YYyyQQ+ZIz0FOY4piCZGqvin5IN4H8shBEFQeEKQ/F+FHWDmaYC/BTHacM4y2nAewmzdWFuo9fZ2aJax7+dlfNOCUyidl6+AC1MCt4+WwnmIsj3A4Ht0ehNWD+D9a6INCJA2pEoT+n4WV4EdGp0AFMp1LIAL72Q+4v3IY46tAg5f83bq/1fBFWBL8ipwbHsYsz+pYsorwOFrXrUAyroCXAHODyAdl7SEHWBeAemjQz1p643eiK1wLfdoiDjQPh3FyhtuaMIBQIZqHs8/HSxQqagCh/oAAAAASUVORK5CYII=" alt="" style="width:22px;height:22px"></div>
+      <span data-i18n="nav_logo">Amazon Ausgaben-Analyse</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features" data-i18n="nav_features">Features</a></li>
+      <li><a href="#howto" data-i18n="nav_howto">Anleitung</a></li>
+      <li><a href="#use-cases" data-i18n="nav_usecases">Anwendung</a></li>
+      <li><a href="#privacy" data-i18n="nav_privacy">Datenschutz</a></li>
+      <li><a href="#impressum">Impressum</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button class="active" onclick="setLang('de')">DE</button>
+        <button onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#install" class="nav-cta" data-i18n="nav_cta">Installieren</a>
+    </div>
+    <button class="nav-mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <span class="badge hero-badge animate-in" data-i18n="hero_badge">100% Lokal & Privat</span>
+    <h1 class="animate-in delay-1" data-i18n-html="hero_title">Deine Amazon-Ausgaben.<br><span class="gradient">Endlich durchschaut.</span></h1>
+    <p class="hero-sub animate-in delay-2" data-i18n="hero_sub">Analysiere deine Amazon-Bestellhistorie direkt im Browser. Automatische Kategorisierung, interaktive Charts, flexible Exporte – ohne dass ein einziges Byte deine Maschine verlässt.</p>
+    <div class="hero-actions animate-in delay-3">
+      <a href="#install" class="btn-primary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg> <span data-i18n="hero_cta">Chrome Web Store</span></a>
+      <a href="#features" class="btn-secondary"><span data-i18n="hero_cta2">Features entdecken ↓</span></a>
+    </div>
+    <div class="hero-screenshot animate-in delay-4">
+      <div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss1">Screenshot: Dashboard Hauptansicht mit Charts</div><div class="label">SCREENSHOT 1 → Dashboard (1280×720)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-item"><div class="trust-icon" style="background:rgba(45,157,120,.1)">🔒</div><span data-i18n="trust_local">100% lokale Verarbeitung</span></div>
+    <div class="trust-item"><div class="trust-icon" style="background:rgba(76,158,235,.1)">⚡</div><span data-i18n="trust_cats">25+ Auto-Kategorien</span></div>
+    <div class="trust-item"><div class="trust-icon" style="background:rgba(155,108,209,.1)">📊</div><span>Excel- & PDF-Export</span></div>
+    <div class="trust-item"><div class="trust-icon" style="background:rgba(232,93,117,.1)">🌍</div><span>Deutsch & English</span></div>
+    <div class="trust-item"><div class="trust-icon" style="background:rgba(212,168,67,.1)">🛡️</div><span data-i18n="trust_notrack">Keine Server, kein Tracking</span></div>
+  </div>
+</div>
+
+<!-- HOW TO -->
+<section id="howto">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-i18n="ht_l">So funktioniert's</div>
+    <h2 data-i18n="ht_t">In 5 Minuten zur Analyse</h2>
+    <p class="section-desc" style="margin-left:auto;margin-right:auto" data-i18n="ht_d">Von der Installation bis zum ersten Aha-Moment – so einfach geht's.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-icon">⬇️</div><div class="step-text" data-i18n="ht_1">Extension installieren</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">2</div><div class="step-icon">🔑</div><div class="step-text" data-i18n="ht_2">Bei Amazon einloggen</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">3</div><div class="step-icon">📋</div><div class="step-text" data-i18n="ht_3">Bestellübersicht öffnen</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">4</div><div class="step-icon">📡</div><div class="step-text" data-i18n="ht_4">Bestellungen auslesen</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">5</div><div class="step-icon">💾</div><div class="step-text" data-i18n="ht_5">CSV speichern</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">6</div><div class="step-icon">📊</div><div class="step-text" data-i18n="ht_6">Dashboard öffnen</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">7</div><div class="step-icon">📂</div><div class="step-text" data-i18n="ht_7">CSV importieren</div></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">8</div><div class="step-icon">🎉</div><div class="step-text" data-i18n="ht_8">Analyse genießen!</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-label" data-i18n="feat_label">Features</div>
+    <h2 data-i18n-html="feat_title">Alles was du brauchst.<br>Nichts was du nicht willst.</h2>
+    <p class="section-desc" data-i18n="feat_desc">Vom Scraping deiner Bestellhistorie bis zum druckfertigen PDF-Bericht – in einem Tool, das komplett offline arbeitet.</p>
+    <div class="features-grid">
+      <div class="feature-card" style="--card-accent:var(--accent);--icon-bg:rgba(76,158,235,.1)"><div class="feature-icon">🔍</div><h3 data-i18n="f1_t">Filter & Drilldown</h3><p data-i18n="f1_d">Filtere nach Jahr, Kategorie, Preis-Range oder Suchbegriff. Klicke auf Chartbereiche für tiefere Analyse – jeder Klick öffnet eine neue Perspektive.</p></div>
+      <div class="feature-card" style="--card-accent:var(--green);--icon-bg:rgba(45,157,120,.1)"><div class="feature-icon">🏷️</div><h3 data-i18n="f2_t">Smarte Kategorisierung</h3><p data-i18n="f2_d">Scoring-basierter Algorithmus mit 1.100+ Keywords erkennt automatisch 25+ Kategorien – von Elektronik bis Haustier.</p></div>
+      <div class="feature-card" style="--card-accent:var(--orange);--icon-bg:rgba(232,114,58,.1)"><div class="feature-icon">✏️</div><h3 data-i18n="f3_t">Re-Kategorisierung</h3><p data-i18n="f3_d">Einzelne oder mehrere Bestellungen per Multiselekt neu zuordnen. Manuelle Zuordnungen bleiben dauerhaft geschützt.</p></div>
+      <div class="feature-card" style="--card-accent:var(--purple);--icon-bg:rgba(155,108,209,.1)"><div class="feature-icon">🔑</div><h3 data-i18n="f4_t">Keyword-Erweiterung</h3><p data-i18n="f4_d">Eigene Keywords pro Kategorie hinzufügen, um die Auto-Kategorisierung für deine Bestellungen zu perfektionieren.</p></div>
+      <div class="feature-card" style="--card-accent:var(--pink);--icon-bg:rgba(232,93,117,.1)"><div class="feature-icon">📤</div><h3 data-i18n="f5_t">Excel- & PDF-Export</h3><p data-i18n="f5_d">Professionelle XLSX-Dateien mit formatierten Spalten oder druckoptimierte PDF-Berichte mit Charts und QR-Code.</p></div>
+      <div class="feature-card" style="--card-accent:var(--gold);--icon-bg:rgba(212,168,67,.1)"><div class="feature-icon">💾</div><h3 data-i18n="f6_t">Backup & Restore</h3><p data-i18n="f6_d">Sichere deine kompletten Daten als JSON-Datei und stelle sie jederzeit auf einem anderen Gerät wieder her.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<div id="details">
+  <section class="showcase-section"><div class="container"><div class="showcase-row">
+    <div class="showcase-text">
+      <div class="section-label" data-i18n="s1_l">Analyse</div>
+      <h3 data-i18n="s1_t">Filter & Drilldown – jeder Klick zählt</h3>
+      <p data-i18n="s1_d">Starte mit der Gesamtübersicht und tauche per Klick tiefer ein. Filtere nach Jahr, Kategorie oder Preis – die Charts aktualisieren sich sofort.</p>
+      <ul class="showcase-list"><li data-i18n="s1_1">Jahresfilter mit Gesamtzeitraum-Option</li><li data-i18n="s1_2">Klick auf Kategorie-Balken filtert die Tabelle</li><li data-i18n="s1_3">Freitext-Suche durchsucht Artikelnamen</li><li data-i18n="s1_4">Alle Filter kombinierbar für präzise Analyse</li></ul>
+    </div>
+    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss2">Screenshot: Filter & Drilldown aktiv</div><div class="label">SCREENSHOT 2 → Filter (1280×720)</div></div></div>
+  </div></div></section>
+
+  <section class="showcase-section"><div class="container"><div class="showcase-row reverse">
+    <div class="showcase-text">
+      <div class="section-label" data-i18n="s2_l">Kategorisierung</div>
+      <h3 data-i18n="s2_t">Einzel- & Multiselekt-Zuordnung</h3>
+      <p data-i18n="s2_d">Nicht jeder Artikel wird sofort richtig erkannt. Korrigiere einzelne Bestellungen per Dropdown oder wähle mehrere gleichzeitig aus und weise sie einer Kategorie zu.</p>
+      <ul class="showcase-list"><li data-i18n="s2_1">Dropdown pro Zeile für Einzelkorrektur</li><li data-i18n="s2_2">Checkbox-Multiselekt für Massenänderung</li><li data-i18n="s2_3">Manuell gesetzte Kategorien werden nie überschrieben</li><li data-i18n="s2_4">Eigene Keywords erweitern die Auto-Erkennung</li></ul>
+    </div>
+    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss3">Screenshot: Re-Kategorisierung mit Multiselekt</div><div class="label">SCREENSHOT 3 → Multiselekt (1280×720)</div></div></div>
+  </div></div></section>
+
+  <section class="showcase-section"><div class="container"><div class="showcase-row">
+    <div class="showcase-text">
+      <div class="section-label">Export</div>
+      <h3 data-i18n="s3_t">Excel & PDF – bereit zum Teilen</h3>
+      <p data-i18n="s3_d">Exportiere deine Analyse als professionell formatierte XLSX-Datei für weitere Auswertung oder als druckoptimiertes PDF mit eingebetteten Charts.</p>
+      <ul class="showcase-list"><li data-i18n="s3_1">XLSX mit formatierten Spalten und Kategorien</li><li data-i18n="s3_2">PDF-Bericht mit Diagrammen und Zusammenfassung</li><li data-i18n="s3_3">Alle aktiven Filter werden im Export berücksichtigt</li><li data-i18n="s3_4">Komplett ohne externe Bibliotheken generiert</li></ul>
+    </div>
+    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss4">Screenshot: Export-Optionen / PDF-Vorschau</div><div class="label">SCREENSHOT 4 → Export (1280×720)</div></div></div>
+  </div></div></section>
+
+  <section class="showcase-section"><div class="container"><div class="showcase-row reverse">
+    <div class="showcase-text">
+      <div class="section-label" data-i18n="s4_l">Datensicherung</div>
+      <h3 data-i18n="s4_t">Backup & Restore – deine Daten, deine Kontrolle</h3>
+      <p data-i18n="s4_d">Exportiere deine gesamte Datenbasis als JSON-Datei und importiere sie auf einem anderen Gerät oder nach einer Neuinstallation.</p>
+      <ul class="showcase-list"><li data-i18n="s4_1">Ein-Klick-Export aller Bestelldaten als JSON</li><li data-i18n="s4_2">Import stellt alle Bestellungen + Kategorien wieder her</li><li data-i18n="s4_3">Manuell vergebene Kategorien bleiben erhalten</li><li data-i18n="s4_4">Ideal für Gerätewechsel oder Browser-Reset</li></ul>
+    </div>
+    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss5">Screenshot: Backup & Restore / Import-Tab</div><div class="label">SCREENSHOT 5 → Backup (1280×720)</div></div></div>
+  </div></div></section>
+</div>
+
+<!-- USE CASES -->
+<section class="use-cases" id="use-cases">
+  <div class="container">
+    <div class="section-label" data-i18n="uc_l">Anwendungsfälle</div>
+    <h2 data-i18n="uc_t">Wer profitiert davon?</h2>
+    <p class="section-desc" data-i18n="uc_d">Egal ob du einfach neugierig bist oder strukturiert deine Finanzen planst – diese Extension liefert dir die Antworten.</p>
+    <div class="use-cases-grid">
+      <div class="use-case-card"><div class="use-case-icon" style="background:rgba(45,157,120,.1)">💰</div><div><h3 data-i18n="uc1_t">Budget-Planung</h3><p data-i18n="uc1_d">Erkenne auf einen Blick, wo dein Geld hinfließt. Vergleiche Ausgaben über Monate und Jahre hinweg und identifiziere Einsparpotenziale.</p></div></div>
+      <div class="use-case-card"><div class="use-case-icon" style="background:rgba(232,93,117,.1)">📋</div><div><h3 data-i18n="uc2_t">Steuererklärung</h3><p data-i18n="uc2_d">Exportiere beruflich relevante Bestellungen kategorisiert als Excel-Datei – die perfekte Grundlage für die Steuererklärung.</p></div></div>
+      <div class="use-case-card"><div class="use-case-icon" style="background:rgba(155,108,209,.1)">👨‍👩‍👧‍👦</div><div><h3 data-i18n="uc3_t">Haushaltsübersicht</h3><p data-i18n="uc3_d">Wie viel geben wir für Kinder, Lebensmittel oder Elektronik aus? Verschaffe dir Transparenz über die Ausgaben deiner Familie.</p></div></div>
+      <div class="use-case-card"><div class="use-case-icon" style="background:rgba(232,114,58,.1)">🔎</div><div><h3 data-i18n="uc4_t">Abo-Kontrolle</h3><p data-i18n="uc4_d">Digitale Abos und wiederkehrende Käufe werden automatisch erkannt. Finde versteckte Abos und unnötige Wiederholungskäufe.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="container">
+    <div class="section-label" data-i18n="cat_l">Kategorien</div>
+    <h2 data-i18n="cat_t">25+ automatische Kategorien</h2>
+    <p class="section-desc" data-i18n="cat_d">Ein Scoring-Algorithmus mit über 1.100 gewichteten Keywords ordnet jede Bestellung der passenden Kategorie zu.</p>
+    <div class="cat-cloud">
+      <span class="cat-chip">⚡ <span data-i18n="c1">Elektronik</span></span>
+      <span class="cat-chip">🏠 <span data-i18n="c2">Haus & Garten</span></span>
+      <span class="cat-chip">👕 <span data-i18n="c3">Kleidung</span></span>
+      <span class="cat-chip">💊 <span data-i18n="c4">Gesundheit</span></span>
+      <span class="cat-chip">📚 <span data-i18n="c5">Medien</span></span>
+      <span class="cat-chip">🧸 <span data-i18n="c6">Kinder</span></span>
+      <span class="cat-chip">🔧 <span data-i18n="c7">Werkzeug</span></span>
+      <span class="cat-chip">🧴 <span data-i18n="c8">Körperpflege</span></span>
+      <span class="cat-chip">🏃 <span data-i18n="c9">Sport & Outdoor</span></span>
+      <span class="cat-chip">🥦 <span data-i18n="c10">Lebensmittel</span></span>
+      <span class="cat-chip">🎫 Tickets</span>
+      <span class="cat-chip">🚗 <span data-i18n="c11">Auto & Motorrad</span></span>
+      <span class="cat-chip">📝 <span data-i18n="c12">Büro & Schreibwaren</span></span>
+      <span class="cat-chip">🐾 <span data-i18n="c13">Haustier</span></span>
+      <span class="cat-chip">📱 <span data-i18n="c14">Abo & Digital</span></span>
+      <span class="cat-chip">🍳 <span data-i18n="c15">Küche & Haushalt</span></span>
+      <span class="cat-chip">🎁 <span data-i18n="c16">Geschenke & Gutscheine</span></span>
+      <span class="cat-chip">📦 <span data-i18n="c17">Sonstiges</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy">
+  <div class="container">
+    <div class="section-label" data-i18n="priv_l">Datenschutzrichtlinie</div>
+    <h2 data-i18n="priv_t">Deine Daten gehören dir.</h2>
+    <p class="section-desc" data-i18n="priv_d">Diese Extension wurde von Grund auf so konzipiert, dass keinerlei Daten dein Gerät verlassen.</p>
+    <div class="legal-content">
+      <div class="lang-de">
+        <h3>1. Verantwortlicher</h3><p>Falk Scherer<br>Alter Elbdeich 176<br>21217 Seevetal<br>E-Mail: donate@connos-bg.de</p>
+        <h3>2. Welche Daten werden verarbeitet?</h3><p>Die Extension liest ausschließlich Bestellinformationen von den Amazon-Webseiten (amazon.de, amazon.com, amazon.at), die du im Browser geöffnet hast:</p><ul><li>Bestelldatum</li><li>Bestellnummer</li><li>Artikelbezeichnung</li><li>Bestellsumme</li></ul><p>Es werden keine personenbezogenen Daten wie Name, Adresse, Zahlungsinformationen oder Kontodaten erfasst.</p>
+        <h3>3. Wo werden die Daten gespeichert?</h3><p>Alle Daten werden ausschließlich lokal in deinem Browser gespeichert (chrome.storage.local). Es erfolgt <strong>keine Übertragung</strong> an externe Server, Cloud-Dienste oder Drittanbieter.</p>
+        <h3>4. Zweck der Datenverarbeitung</h3><p>Die erfassten Bestelldaten dienen ausschließlich der lokalen Analyse und Visualisierung deiner Amazon-Ausgaben im Dashboard.</p>
+        <h3>5. Weitergabe an Dritte</h3><p>Es findet <strong>keine Weitergabe</strong> von Daten an Dritte statt. Keine Tracking-Skripte, keine Analytics, keine Werbung.</p>
+        <h3>6. Deine Rechte</h3><p>Da alle Daten lokal verbleiben, hast du die volle Kontrolle:</p><ul><li>Daten einsehen: im Dashboard der Extension</li><li>Daten exportieren: über die Backup-Funktion (JSON-Export)</li><li>Daten löschen: über die Löschfunktion oder durch Deinstallation</li></ul>
+        <h3>7. Berechtigungen</h3><p>Die Extension benötigt:</p><ul><li><strong>activeTab:</strong> Zugriff auf den aktiven Tab für das Scraping-Skript</li><li><strong>scripting:</strong> Injektion des Content-Skripts</li><li><strong>storage:</strong> Lokale Speicherung der Bestelldaten</li><li><strong>Host-Zugriff (amazon.de/com/at):</strong> Nur Amazon-Bestellseiten</li></ul>
+        <h3>8. Änderungen</h3><p>Änderungen werden auf dieser Seite veröffentlicht.</p><p style="margin-top:24px;color:var(--text-dim);font-size:.8rem">Stand: März 2026</p>
+      </div>
+      <div class="lang-en" style="display:none">
+        <h3>1. Controller</h3><p>Falk Scherer<br>Alter Elbdeich 176<br>21217 Seevetal, Germany<br>Email: donate@connos-bg.de</p>
+        <h3>2. What data is processed?</h3><p>The extension reads only order information from Amazon websites (amazon.de, amazon.com, amazon.at) open in your browser:</p><ul><li>Order date</li><li>Order number</li><li>Item description</li><li>Order total</li></ul><p>No personal data such as names, addresses, payment information, or account details is collected.</p>
+        <h3>3. Where is data stored?</h3><p>All data is stored exclusively in your browser's local storage (chrome.storage.local). There is <strong>no transmission</strong> to external servers, cloud services, or third parties.</p>
+        <h3>4. Purpose of data processing</h3><p>Collected order data is used solely for local analysis and visualization of your Amazon spending.</p>
+        <h3>5. Third-party sharing</h3><p>There is <strong>no sharing</strong> of data with third parties. No tracking scripts, no analytics, no advertising.</p>
+        <h3>6. Your rights</h3><p>Since all data remains locally on your device, you have full control:</p><ul><li>View data: in the extension's dashboard</li><li>Export data: via the backup function (JSON export)</li><li>Delete data: via the delete function or by uninstalling</li></ul>
+        <h3>7. Permissions</h3><p>The extension requires:</p><ul><li><strong>activeTab:</strong> Access to the active tab for the scraping script</li><li><strong>scripting:</strong> Content script injection</li><li><strong>storage:</strong> Local storage of order data</li><li><strong>Host access (amazon.de/com/at):</strong> Amazon order pages only</li></ul>
+        <h3>8. Changes</h3><p>Changes will be published on this page.</p><p style="margin-top:24px;color:var(--text-dim);font-size:.8rem">Last updated: March 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPRESSUM -->
+<section id="impressum" style="padding-top:60px">
+  <div class="container">
+    <div class="section-label">Impressum / Legal Notice</div>
+    <h2>Impressum</h2>
+    <div class="legal-content">
+      <div class="lang-de">
+        <h3>Angaben gemäß § 5 DDG</h3><p>Falk Scherer<br>Alter Elbdeich 176<br>21217 Seevetal</p>
+        <h3>Kontakt</h3><p>E-Mail: donate@connos-bg.de</p>
+        <h3>Hinweis</h3><p>Dies ist ein privates, nicht-kommerzielles Open-Source-Projekt. Es werden keine Waren oder Dienstleistungen angeboten. Die freiwillige Spendenmöglichkeit via PayPal dient ausschließlich der Unterstützung der Weiterentwicklung.</p>
+        <h3>Haftung für Inhalte</h3><p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird jedoch keine Gewähr übernommen.</p>
+        <h3>Haftung für Links</h3><p>Diese Website enthält Links zu externen Webseiten Dritter, auf deren Inhalte kein Einfluss besteht. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.</p>
+      </div>
+      <div class="lang-en" style="display:none">
+        <h3>Information pursuant to § 5 DDG</h3><p>Falk Scherer<br>Alter Elbdeich 176<br>21217 Seevetal, Germany</p>
+        <h3>Contact</h3><p>Email: donate@connos-bg.de</p>
+        <h3>Note</h3><p>This is a private, non-commercial open-source project. No goods or services are offered for sale. The voluntary donation option via PayPal serves solely to support further development.</p>
+        <h3>Liability for content</h3><p>The contents of this website have been created with the greatest possible care. However, no guarantee is given for the accuracy, completeness, or timeliness of the content.</p>
+        <h3>Liability for links</h3><p>This website contains links to external third-party websites whose content is beyond our control. The respective provider is always responsible for the content of linked pages.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="install">
+  <div class="container">
+    <div class="section-label" data-i18n="cta_l">Jetzt starten</div>
+    <h2 data-i18n="cta_t">Bereit für den Durchblick?</h2>
+    <p class="section-desc" data-i18n="cta_d">Installiere die Extension und starte deine erste Analyse in unter 2 Minuten. Kostenlos, privat, ohne Registrierung.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg> <span data-i18n="cta_btn">Aus dem Chrome Web Store installieren</span></a>
+      <a href="https://www.paypal.com/donate/?hosted_button_id=LBAGVGGLPXMYQ" target="_blank" rel="noopener" class="btn-secondary">❤️ <span data-i18n="cta_donate">Projekt unterstützen</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <span class="footer-text" data-i18n="footer">© 2026 Amazon Ausgaben-Analyse · Alle Daten bleiben lokal.</span>
+    <ul class="footer-links">
+      <li><a href="#privacy" data-i18n="nav_privacy">Datenschutz</a></li>
+      <li><a href="#impressum">Impressum</a></li>
+      <li><a href="#features" data-i18n="nav_features">Features</a></li>
+      <li><a href="https://www.paypal.com/donate/?hosted_button_id=LBAGVGGLPXMYQ" target="_blank" rel="noopener" data-i18n="f_donate">Spenden</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL i18n – one toggle, entire page switches
+   ═══════════════════════════════════════════════════════════ */
+var T = {
+  nav_logo:'Amazon Spending Analysis', nav_features:'Features', nav_howto:'How To', nav_details:'Details',
+  nav_usecases:'Use Cases', nav_privacy:'Privacy', nav_cta:'Install',
+  hero_badge:'100% Local & Private',
+  hero_title:'Your Amazon spending.<br><span class="gradient">Finally understood.</span>',
+  hero_sub:'Analyze your Amazon order history right in your browser. Automatic categorization, interactive charts, flexible exports – without a single byte leaving your machine.',
+  hero_cta:'Chrome Web Store', hero_cta2:'Discover features ↓',
+  ss1:'Screenshot: Dashboard main view with charts',
+  trust_local:'100% local processing', trust_cats:'25+ auto-categories', trust_notrack:'No servers, no tracking',
+  ht_l:'How It Works', ht_t:'Up and running in 5 minutes',
+  ht_d:'From installation to your first aha moment – it\'s that simple.',
+  ht_1:'Install extension', ht_2:'Log in to Amazon', ht_3:'Open order history',
+  ht_4:'Scrape orders', ht_5:'Save CSV', ht_6:'Open dashboard',
+  ht_7:'Import CSV', ht_8:'Enjoy the analysis!',
+  feat_label:'Features', feat_title:'Everything you need.<br>Nothing you don\'t.',
+  feat_desc:'From scraping your order history to print-ready PDF reports – in one tool that works completely offline.',
+  f1_t:'Filter & Drilldown', f1_d:'Filter by year, category, price range, or search term. Click chart areas for deeper analysis – every click opens a new perspective.',
+  f2_t:'Smart Categorization', f2_d:'Scoring-based algorithm with 1,100+ keywords automatically identifies 25+ categories – from electronics to pet supplies.',
+  f3_t:'Re-Categorization', f3_d:'Reassign single or multiple orders via multi-select. Manual assignments remain permanently protected.',
+  f4_t:'Keyword Extension', f4_d:'Add custom keywords per category to perfect the auto-categorization for your orders.',
+  f5_t:'Excel & PDF Export', f5_d:'Professional XLSX files with formatted columns or print-optimized PDF reports with charts and QR code.',
+  f6_t:'Backup & Restore', f6_d:'Save your complete data as a JSON file and restore it anytime on another device.',
+  s1_l:'Analysis', s1_t:'Filter & Drilldown – every click counts',
+  s1_d:'Start with the full overview and drill down with a click. Filter by year, category, or price – charts update instantly.',
+  s1_1:'Year filter with all-time option', s1_2:'Click on category bars to filter the table',
+  s1_3:'Free-text search across item names', s1_4:'All filters combinable for precise analysis',
+  ss2:'Screenshot: Filter & drilldown active',
+  s2_l:'Categorization', s2_t:'Single & multi-select assignment',
+  s2_d:'Not every item is recognized correctly. Fix individual orders via dropdown or select multiple and assign them at once.',
+  s2_1:'Per-row dropdown for single corrections', s2_2:'Checkbox multi-select for bulk changes',
+  s2_3:'Manually set categories are never overwritten', s2_4:'Custom keywords extend auto-detection',
+  ss3:'Screenshot: Re-categorization with multi-select',
+  s3_t:'Excel & PDF – ready to share',
+  s3_d:'Export your analysis as a professionally formatted XLSX file or as a print-optimized PDF with embedded charts.',
+  s3_1:'XLSX with formatted columns and categories', s3_2:'PDF report with charts and summary',
+  s3_3:'All active filters are applied to the export', s3_4:'Generated entirely without external libraries',
+  ss4:'Screenshot: Export options / PDF preview',
+  s4_l:'Data Backup', s4_t:'Backup & Restore – your data, your control',
+  s4_d:'Export your entire database as a JSON file and import it on another device or after a reinstallation.',
+  s4_1:'One-click export of all order data as JSON', s4_2:'Import restores all orders + categories',
+  s4_3:'Manually assigned categories are preserved', s4_4:'Ideal for device changes or browser resets',
+  ss5:'Screenshot: Backup & Restore / Import tab',
+  uc_l:'Use Cases', uc_t:'Who benefits from this?',
+  uc_d:'Whether you\'re just curious or planning your finances systematically – this extension delivers the answers.',
+  uc1_t:'Budget Planning', uc1_d:'See at a glance where your money goes. Compare spending across months and years and identify savings potential.',
+  uc2_t:'Tax Returns', uc2_d:'Export work-related orders categorized as an Excel file – the perfect basis for your tax return.',
+  uc3_t:'Household Overview', uc3_d:'How much do we spend on kids, groceries, or electronics? Get full transparency on your family\'s spending.',
+  uc4_t:'Subscription Control', uc4_d:'Digital subscriptions and recurring purchases are automatically detected. Find hidden subscriptions and unnecessary repeat buys.',
+  cat_l:'Categories', cat_t:'25+ automatic categories',
+  cat_d:'A scoring algorithm with over 1,100 weighted keywords assigns every order to the right category.',
+  c1:'Electronics',c2:'Home & Garden',c3:'Clothing',c4:'Health',c5:'Media',c6:'Kids',c7:'Tools',
+  c8:'Personal Care',c9:'Sports & Outdoor',c10:'Groceries',c11:'Auto & Motorcycle',
+  c12:'Office & Stationery',c13:'Pets',c14:'Subscriptions & Digital',c15:'Kitchen & Household',
+  c16:'Gifts & Vouchers',c17:'Other',
+  priv_l:'Privacy Policy', priv_t:'Your data belongs to you.',
+  priv_d:'This extension was designed from the ground up so that no data ever leaves your device.',
+  cta_l:'Get Started', cta_t:'Ready for clarity?',
+  cta_d:'Install the extension and start your first analysis in under 2 minutes. Free, private, no registration.',
+  cta_btn:'Install from Chrome Web Store', cta_donate:'Support the project',
+  footer:'© 2026 Amazon Spending Analysis · All data stays local.', f_donate:'Donate'
+};
+
+var curLang='de';
+function setLang(l){
+  curLang=l;
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lang-toggle button').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===l.toUpperCase())});
+  document.querySelectorAll('.lang-de').forEach(function(e){e.style.display=l==='de'?'block':'none'});
+  document.querySelectorAll('.lang-en').forEach(function(e){e.style.display=l==='en'?'block':'none'});
+  if(l==='de'){
+    document.querySelectorAll('[data-i18n]').forEach(function(e){if(e._origT)e.textContent=e._origT});
+    document.querySelectorAll('[data-i18n-html]').forEach(function(e){if(e._origH)e.innerHTML=e._origH});
+  } else {
+    document.querySelectorAll('[data-i18n]').forEach(function(e){var k=e.getAttribute('data-i18n');if(T[k])e.textContent=T[k]});
+    document.querySelectorAll('[data-i18n-html]').forEach(function(e){var k=e.getAttribute('data-i18n-html');if(T[k])e.innerHTML=T[k]});
+  }
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('[data-i18n]').forEach(function(e){e._origT=e.textContent});
+  document.querySelectorAll('[data-i18n-html]').forEach(function(e){e._origH=e.innerHTML});
+  var bl=(navigator.language||'de').substring(0,2);
+  if(bl!=='de')setLang('en');
+});
+
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.feature-card,.use-case-card,.showcase-row,.cat-chip,.step').forEach(function(e){e.style.opacity='0';e.style.transform='translateY(20px)';e.style.transition='opacity .5s ease,transform .5s ease';obs.observe(e)});
+
+window.addEventListener('scroll',function(){var n=document.querySelector('nav');if(window.scrollY>50){n.style.borderBottomColor='rgba(255,255,255,.08)';n.style.background='rgba(11,14,17,.95)'}else{n.style.borderBottomColor='rgba(255,255,255,.06)';n.style.background='rgba(11,14,17,.8)'}});
+</script>
+</body>
+</html>

@@ -14,7 +14,6 @@
 :root{--bg:#0B0E11;--bg-card:#131820;--bg-card-hover:#1A2230;--surface:#182030;--border:rgba(255,255,255,0.06);--border-accent:rgba(76,158,235,0.25);--text:#E8ECF1;--text-muted:#8694A8;--text-dim:#5A6A80;--accent:#4C9EEB;--accent-glow:rgba(76,158,235,0.15);--green:#2D9D78;--orange:#E8723A;--pink:#E85D75;--purple:#9B6CD1;--gold:#D4A843;--radius:12px;--radius-lg:20px;--font:'DM Sans',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace}
 html{scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
 .container{max-width:1120px;margin:0 auto;padding:0 24px}
 a{color:var(--accent);text-decoration:none;transition:color .2s}a:hover{color:#6DB5F5}
 .badge{display:inline-block;padding:5px 14px;border-radius:100px;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1px solid}
@@ -70,6 +69,11 @@ nav .container{display:flex;align-items:center;justify-content:space-between;hei
 .showcase-list li{display:flex;align-items:flex-start;gap:10px;color:var(--text-muted);font-size:.88rem}
 .showcase-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
 .showcase-screenshot{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.showcase-screenshots-dual{display:flex;flex-direction:column;gap:16px}
+.showcase-screenshots-dual .showcase-screenshot{box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.showcase-screenshots-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.showcase-screenshots-grid .showcase-screenshot{box-shadow:0 10px 30px rgba(0,0,0,.25)}
+@media(max-width:600px){.showcase-screenshots-grid{grid-template-columns:1fr}}
 .use-cases{background:var(--bg)}
 .use-cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .use-case-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;display:flex;gap:20px;transition:all .3s}.use-case-card:hover{border-color:rgba(255,255,255,.1);background:var(--bg-card-hover)}
@@ -144,7 +148,7 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
       <a href="#features" class="btn-secondary"><span data-i18n="hero_cta2">Features entdecken ↓</span></a>
     </div>
     <div class="hero-screenshot animate-in delay-4">
-      <div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss1">Screenshot: Dashboard Hauptansicht mit Charts</div><div class="label">SCREENSHOT 1 → Dashboard (1280×720)</div></div>
+      <div class="screenshot-placeholder" style="aspect-ratio:auto"><img src="screenshot-1.jpg" alt="Dashboard Hauptansicht mit Charts" style="width:100%;display:block"></div>
     </div>
   </div>
 </section>
@@ -193,11 +197,11 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
     <h2 data-i18n-html="feat_title">Alles was du brauchst.<br>Nichts was du nicht willst.</h2>
     <p class="section-desc" data-i18n="feat_desc">Vom Scraping deiner Bestellhistorie bis zum druckfertigen PDF-Bericht – in einem Tool, das komplett offline arbeitet.</p>
     <div class="features-grid">
-      <div class="feature-card" style="--card-accent:var(--accent);--icon-bg:rgba(76,158,235,.1)"><div class="feature-icon">🔍</div><h3 data-i18n="f1_t">Filter & Drilldown</h3><p data-i18n="f1_d">Filtere nach Jahr, Kategorie, Preis-Range oder Suchbegriff. Klicke auf Chartbereiche für tiefere Analyse – jeder Klick öffnet eine neue Perspektive.</p></div>
+      <div class="feature-card" style="--card-accent:var(--accent);--icon-bg:rgba(76,158,235,.1)"><div class="feature-icon">🔍</div><h3 data-i18n="f1_t">Filter & Drilldown</h3><p data-i18n="f1_d">Filtere nach Jahr, Monat, Kategorie oder Suchbegriff. Klicke auf Chartbereiche für tiefere Analyse – jeder Klick öffnet eine neue Perspektive.</p></div>
       <div class="feature-card" style="--card-accent:var(--green);--icon-bg:rgba(45,157,120,.1)"><div class="feature-icon">🏷️</div><h3 data-i18n="f2_t">Smarte Kategorisierung</h3><p data-i18n="f2_d">Scoring-basierter Algorithmus mit 1.100+ Keywords erkennt automatisch 25+ Kategorien – von Elektronik bis Haustier.</p></div>
       <div class="feature-card" style="--card-accent:var(--orange);--icon-bg:rgba(232,114,58,.1)"><div class="feature-icon">✏️</div><h3 data-i18n="f3_t">Re-Kategorisierung</h3><p data-i18n="f3_d">Einzelne oder mehrere Bestellungen per Multiselekt neu zuordnen. Manuelle Zuordnungen bleiben dauerhaft geschützt.</p></div>
       <div class="feature-card" style="--card-accent:var(--purple);--icon-bg:rgba(155,108,209,.1)"><div class="feature-icon">🔑</div><h3 data-i18n="f4_t">Keyword-Erweiterung</h3><p data-i18n="f4_d">Eigene Keywords pro Kategorie hinzufügen, um die Auto-Kategorisierung für deine Bestellungen zu perfektionieren.</p></div>
-      <div class="feature-card" style="--card-accent:var(--pink);--icon-bg:rgba(232,93,117,.1)"><div class="feature-icon">📤</div><h3 data-i18n="f5_t">Excel- & PDF-Export</h3><p data-i18n="f5_d">Professionelle XLSX-Dateien mit formatierten Spalten oder druckoptimierte PDF-Berichte mit Charts und QR-Code.</p></div>
+      <div class="feature-card" style="--card-accent:var(--pink);--icon-bg:rgba(232,93,117,.1)"><div class="feature-icon">📤</div><h3 data-i18n="f5_t">Excel- & PDF-Export</h3><p data-i18n="f5_d">Professionelle XLSX-Dateien mit formatierten Spalten oder druckoptimierte PDF-Berichte mit Charts und Zusammenfassung.</p></div>
       <div class="feature-card" style="--card-accent:var(--gold);--icon-bg:rgba(212,168,67,.1)"><div class="feature-icon">💾</div><h3 data-i18n="f6_t">Backup & Restore</h3><p data-i18n="f6_d">Sichere deine kompletten Daten als JSON-Datei und stelle sie jederzeit auf einem anderen Gerät wieder her.</p></div>
     </div>
   </div>
@@ -209,10 +213,23 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
     <div class="showcase-text">
       <div class="section-label" data-i18n="s1_l">Analyse</div>
       <h3 data-i18n="s1_t">Filter & Drilldown – jeder Klick zählt</h3>
-      <p data-i18n="s1_d">Starte mit der Gesamtübersicht und tauche per Klick tiefer ein. Filtere nach Jahr, Kategorie oder Preis – die Charts aktualisieren sich sofort.</p>
+      <p data-i18n="s1_d">Starte mit der Gesamtübersicht und tauche per Klick tiefer ein. Filtere nach Jahr, Monat oder Kategorie – die Charts aktualisieren sich sofort.</p>
       <ul class="showcase-list"><li data-i18n="s1_1">Jahresfilter mit Gesamtzeitraum-Option</li><li data-i18n="s1_2">Klick auf Kategorie-Balken filtert die Tabelle</li><li data-i18n="s1_3">Freitext-Suche durchsucht Artikelnamen</li><li data-i18n="s1_4">Alle Filter kombinierbar für präzise Analyse</li></ul>
     </div>
-    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss2">Screenshot: Filter & Drilldown aktiv</div><div class="label">SCREENSHOT 2 → Filter (1280×720)</div></div></div>
+    <div class="showcase-screenshots-dual">
+      <div class="showcase-screenshot"><img src="screenshot-2.jpg" alt="Dashboard Alle Jahre gefiltert" style="width:100%;display:block"></div>
+      <div class="showcase-screenshot"><img src="screenshot-6.jpg" alt="Dashboard Einzeljahr mit Monatsansicht" style="width:100%;display:block"></div>
+    </div>
+  </div></div></section>
+
+  <section class="showcase-section"><div class="container"><div class="showcase-row reverse">
+    <div class="showcase-text">
+      <div class="section-label" data-i18n="s5_l">Ranking</div>
+      <h3 data-i18n="s5_t">Top-Ausgaben auf einen Blick</h3>
+      <p data-i18n="s5_d">Welche Einzelartikel haben am meisten gekostet? Das Top-Ausgaben-Ranking zeigt dir sofort die größten Posten – mit Kategorie, Datum und Betrag.</p>
+      <ul class="showcase-list"><li data-i18n="s5_1">Ranking der teuersten Einzelbestellungen</li><li data-i18n="s5_2">Kategorie-Icons für schnelle Zuordnung</li><li data-i18n="s5_3">Medaillen für die Top 3 Ausgaben</li><li data-i18n="s5_4">Filtert sich mit Jahres- und Kategorieauswahl</li></ul>
+    </div>
+    <div class="showcase-screenshot"><img src="screenshot-7.jpg" alt="Top-Ausgaben Ranking" style="width:100%;display:block"></div>
   </div></div></section>
 
   <section class="showcase-section"><div class="container"><div class="showcase-row reverse">
@@ -222,7 +239,10 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
       <p data-i18n="s2_d">Nicht jeder Artikel wird sofort richtig erkannt. Korrigiere einzelne Bestellungen per Dropdown oder wähle mehrere gleichzeitig aus und weise sie einer Kategorie zu.</p>
       <ul class="showcase-list"><li data-i18n="s2_1">Dropdown pro Zeile für Einzelkorrektur</li><li data-i18n="s2_2">Checkbox-Multiselekt für Massenänderung</li><li data-i18n="s2_3">Manuell gesetzte Kategorien werden nie überschrieben</li><li data-i18n="s2_4">Eigene Keywords erweitern die Auto-Erkennung</li></ul>
     </div>
-    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss3">Screenshot: Re-Kategorisierung mit Multiselekt</div><div class="label">SCREENSHOT 3 → Multiselekt (1280×720)</div></div></div>
+    <div class="showcase-screenshots-dual">
+      <div class="showcase-screenshot"><img src="screenshot-8.jpg" alt="Bestellliste mit Kategorien" style="width:100%;display:block"></div>
+      <div class="showcase-screenshot"><img src="screenshot-3.jpg" alt="Multiselekt Re-Kategorisierung" style="width:100%;display:block"></div>
+    </div>
   </div></div></section>
 
   <section class="showcase-section"><div class="container"><div class="showcase-row">
@@ -232,7 +252,12 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
       <p data-i18n="s3_d">Exportiere deine Analyse als professionell formatierte XLSX-Datei für weitere Auswertung oder als druckoptimiertes PDF mit eingebetteten Charts.</p>
       <ul class="showcase-list"><li data-i18n="s3_1">XLSX mit formatierten Spalten und Kategorien</li><li data-i18n="s3_2">PDF-Bericht mit Diagrammen und Zusammenfassung</li><li data-i18n="s3_3">Alle aktiven Filter werden im Export berücksichtigt</li><li data-i18n="s3_4">Komplett ohne externe Bibliotheken generiert</li></ul>
     </div>
-    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss4">Screenshot: Export-Optionen / PDF-Vorschau</div><div class="label">SCREENSHOT 4 → Export (1280×720)</div></div></div>
+    <div class="showcase-screenshots-grid">
+      <div class="showcase-screenshot"><img src="screenshot-4.jpg" alt="Excel Export Dashboard" style="width:100%;display:block"></div>
+      <div class="showcase-screenshot"><img src="screenshot-9.jpg" alt="PDF Export Dashboard" style="width:100%;display:block"></div>
+      <div class="showcase-screenshot"><img src="screenshot-10.jpg" alt="Excel Export Bestellungen" style="width:100%;display:block"></div>
+      <div class="showcase-screenshot"><img src="screenshot-11.jpg" alt="PDF Export Bestellungen" style="width:100%;display:block"></div>
+    </div>
   </div></div></section>
 
   <section class="showcase-section"><div class="container"><div class="showcase-row reverse">
@@ -242,7 +267,7 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
       <p data-i18n="s4_d">Exportiere deine gesamte Datenbasis als JSON-Datei und importiere sie auf einem anderen Gerät oder nach einer Neuinstallation.</p>
       <ul class="showcase-list"><li data-i18n="s4_1">Ein-Klick-Export aller Bestelldaten als JSON</li><li data-i18n="s4_2">Import stellt alle Bestellungen + Kategorien wieder her</li><li data-i18n="s4_3">Manuell vergebene Kategorien bleiben erhalten</li><li data-i18n="s4_4">Ideal für Gerätewechsel oder Browser-Reset</li></ul>
     </div>
-    <div class="showcase-screenshot"><div class="screenshot-placeholder"><div class="icon">📸</div><div data-i18n="ss5">Screenshot: Backup & Restore / Import-Tab</div><div class="label">SCREENSHOT 5 → Backup (1280×720)</div></div></div>
+    <div class="showcase-screenshot"><img src="screenshot-5.jpg" alt="Backup & Restore / Import-Tab" style="width:100%;display:block"></div>
   </div></div></section>
 </div>
 
@@ -391,17 +416,21 @@ var T = {
   ht_7:'Import CSV', ht_8:'Enjoy the analysis!',
   feat_label:'Features', feat_title:'Everything you need.<br>Nothing you don\'t.',
   feat_desc:'From scraping your order history to print-ready PDF reports – in one tool that works completely offline.',
-  f1_t:'Filter & Drilldown', f1_d:'Filter by year, category, price range, or search term. Click chart areas for deeper analysis – every click opens a new perspective.',
+  f1_t:'Filter & Drilldown', f1_d:'Filter by year, month, category, or search term. Click chart areas for deeper analysis – every click opens a new perspective.',
   f2_t:'Smart Categorization', f2_d:'Scoring-based algorithm with 1,100+ keywords automatically identifies 25+ categories – from electronics to pet supplies.',
   f3_t:'Re-Categorization', f3_d:'Reassign single or multiple orders via multi-select. Manual assignments remain permanently protected.',
   f4_t:'Keyword Extension', f4_d:'Add custom keywords per category to perfect the auto-categorization for your orders.',
-  f5_t:'Excel & PDF Export', f5_d:'Professional XLSX files with formatted columns or print-optimized PDF reports with charts and QR code.',
+  f5_t:'Excel & PDF Export', f5_d:'Professional XLSX files with formatted columns or print-optimized PDF reports with charts and summary.',
   f6_t:'Backup & Restore', f6_d:'Save your complete data as a JSON file and restore it anytime on another device.',
   s1_l:'Analysis', s1_t:'Filter & Drilldown – every click counts',
-  s1_d:'Start with the full overview and drill down with a click. Filter by year, category, or price – charts update instantly.',
+  s1_d:'Start with the full overview and drill down with a click. Filter by year, month, or category – charts update instantly.',
   s1_1:'Year filter with all-time option', s1_2:'Click on category bars to filter the table',
   s1_3:'Free-text search across item names', s1_4:'All filters combinable for precise analysis',
   ss2:'Screenshot: Filter & drilldown active',
+  s5_l:'Ranking', s5_t:'Top spending at a glance',
+  s5_d:'Which individual items cost the most? The top spending ranking instantly shows you the biggest items – with category, date, and amount.',
+  s5_1:'Ranking of most expensive single orders', s5_2:'Category icons for quick identification',
+  s5_3:'Medals for the top 3 expenses', s5_4:'Filters with year and category selection',
   s2_l:'Categorization', s2_t:'Single & multi-select assignment',
   s2_d:'Not every item is recognized correctly. Fix individual orders via dropdown or select multiple and assign them at once.',
   s2_1:'Per-row dropdown for single corrections', s2_2:'Checkbox multi-select for bulk changes',

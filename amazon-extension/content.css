@@ -9,7 +9,7 @@
 }
 .aa-card { background: var(--aa-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); width: 360px; overflow: hidden; }
 .aa-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.aa-logo { font-size: 18px; }
+.aa-logo { font-size: 18px; display:flex; align-items:center; }
 .aa-title { font-weight: 700; font-size: 14px; flex: 1; }
 .aa-close { background: none; border: none; color: var(--aa-t3); font-size: 18px; cursor: pointer; padding: 0 4px; }
 .aa-close:hover { color: var(--aa-t1); }
@@ -50,5 +50,5 @@
 .aa-stored { font-size: 12px; color: var(--aa-t2); padding: 6px 0; }
 
 /* FAB */
-.aa-fab { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--aa-accent); color: white; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(45,157,120,0.4); z-index: 99999; transition: transform 0.2s; }
+.aa-fab { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: #FF9900; color: white; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(255,153,0,0.4); z-index: 99999; transition: transform 0.2s; }
 .aa-fab:hover { transform: scale(1.1); }

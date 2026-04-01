@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Amazon Spending Analysis / Ausgaben-Analyse",
-  "version": "5.5.0",
+  "version": "5.7.0",
   "description": "Analyze your Amazon spending – scrape orders, export CSV, charts & reports. / Amazon-Ausgaben analysieren.",
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": ["https://www.amazon.de/*", "https://www.amazon.com/*", "https://www.amazon.at/*"],

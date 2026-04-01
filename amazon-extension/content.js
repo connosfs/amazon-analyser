@@ -1,5 +1,5 @@
 /**
- * Amazon Spending Analysis / Ausgaben-Analyse – Content Script v5.5
+ * Amazon Spending Analysis / Ausgaben-Analyse – Content Script v5.7
  * EN: Scrapes Amazon order pages, auto-pagination, CSV export, bilingual panel
  * DE: Liest Amazon-Bestellseiten aus, Auto-Pagination, CSV-Export, zweisprachiges Panel
  */
@@ -174,8 +174,8 @@
     panel.innerHTML =
       '<div class="aa-card">' +
         '<div class="aa-header">' +
-          '<span class="aa-logo">\uD83D\uDCCA</span>' +
-          '<span class="aa-title">'+ct('title')+' <span style="font-size:10px;color:#5E6B80;font-weight:400">5.5</span></span>' +
+          '<span class="aa-logo"><svg width="18" height="18" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#FF9900"/><rect x="18" y="76" width="22" height="38" rx="6" fill="#fff"/><rect x="48" y="54" width="22" height="60" rx="6" fill="#fff" opacity=".88"/><rect x="78" y="30" width="22" height="84" rx="6" fill="#fff" opacity=".72"/><circle cx="110" cy="32" r="14" fill="none" stroke="#1a1a2e" stroke-width="5"/><line x1="120" y1="42" x2="130" y2="52" stroke="#1a1a2e" stroke-width="5" stroke-linecap="round"/></svg></span>' +
+          '<span class="aa-title">'+ct('title')+' <span style="font-size:10px;color:#5E6B80;font-weight:400">5.7</span></span>' +
           '<button class="aa-close" id="aa-minimize">\u2212</button>' +
         '</div>' +
         '<div class="aa-body" id="aa-body">' +
@@ -203,7 +203,7 @@
           '<div class="aa-stored" id="aa-stored"></div>' +
         '</div>' +
       '</div>' +
-      '<button class="aa-fab" id="aa-fab" style="display:none">\uD83D\uDCCA</button>';
+      '<button class="aa-fab" id="aa-fab" style="display:none"><svg width="22" height="22" viewBox="0 0 128 128"><rect x="18" y="76" width="22" height="38" rx="6" fill="#fff"/><rect x="48" y="54" width="22" height="60" rx="6" fill="#fff" opacity=".88"/><rect x="78" y="30" width="22" height="84" rx="6" fill="#fff" opacity=".72"/></svg></button>';
     document.body.appendChild(panel);
 
     var statusEl = document.getElementById('aa-status');

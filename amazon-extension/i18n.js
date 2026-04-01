@@ -76,10 +76,12 @@ var I18N = {
     restoreBackup: 'Backup wiederherstellen',
     restoreDesc: 'JSON-Backup laden (inkl. Kategorie-Korrekturen und eigene Keyword-Regeln):',
     loadBackupFile: '\uD83D\uDCC2 Backup-Datei laden (.json)',
-    dataManage: 'Daten verwalten',
-    deleteBtn: '\uD83D\uDDD1 L\u00F6schen',
+    backupRestore: 'Backup & Wiederherstellen',
+    deleteBtn: '\uD83D\uDDD1 Alle Daten l\u00F6schen',
+    deleteData: 'Daten l\u00F6schen',
+    deleteWarning: 'Alle importierten Bestellungen, Kategorie-Zuordnungen und Keyword-Regeln werden unwiderruflich gel\u00F6scht. Erstelle vorher ein Backup, falls du die Daten sp\u00E4ter wieder ben\u00F6tigst.',
     backupBtn: '\uD83D\uDCBE Backup erstellen',
-    deleteConfirm: 'Alle Daten l\u00F6schen?',
+    deleteConfirm: 'Alle Daten unwiderruflich l\u00F6schen? Diese Aktion kann nicht r\u00FCckg\u00E4ngig gemacht werden.',
 
     // Keywords
     kwTitle: 'Kategorisierungsregeln',
@@ -192,10 +194,12 @@ var I18N = {
     restoreBackup: 'Restore Backup',
     restoreDesc: 'Load JSON backup (including category corrections and custom keyword rules):',
     loadBackupFile: '\uD83D\uDCC2 Load backup file (.json)',
-    dataManage: 'Manage Data',
-    deleteBtn: '\uD83D\uDDD1 Delete',
+    backupRestore: 'Backup & Restore',
+    deleteBtn: '\uD83D\uDDD1 Delete all data',
+    deleteData: 'Delete Data',
     backupBtn: '\uD83D\uDCBE Create Backup',
-    deleteConfirm: 'Delete all data?',
+    deleteConfirm: 'Permanently delete all data? This action cannot be undone.',
+    deleteWarning: 'All imported orders, category assignments and keyword rules will be permanently deleted. Create a backup first if you might need the data later.',
 
     // Keywords
     kwTitle: 'Categorization Rules',

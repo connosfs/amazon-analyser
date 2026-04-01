@@ -142,7 +142,7 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
   <div class="container">
     <span class="badge hero-badge animate-in" data-i18n="hero_badge">100% Lokal & Privat</span>
     <h1 class="animate-in delay-1" data-i18n-html="hero_title">Deine Amazon-Ausgaben.<br><span class="gradient">Endlich durchschaut.</span></h1>
-    <p class="hero-sub animate-in delay-2" data-i18n="hero_sub">Analysiere deine Amazon-Bestellhistorie direkt im Browser. Automatische Kategorisierung, interaktive Charts, flexible Exporte – ohne dass ein einziges Byte deine Maschine verlässt.</p>
+    <p class="hero-sub animate-in delay-2" data-i18n="hero_sub">Analysiere deine eigenen Amazon-Bestellungen für persönliche Zwecke – direkt im Browser. Automatische Kategorisierung, interaktive Charts, flexible Exporte – ohne dass ein einziges Byte deine Maschine verlässt.</p>
     <div class="hero-actions animate-in delay-3">
       <a href="#install" class="btn-primary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg> <span data-i18n="hero_cta">Chrome Web Store</span></a>
       <a href="#features" class="btn-secondary"><span data-i18n="hero_cta2">Features entdecken ↓</span></a>
@@ -330,7 +330,9 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
         <h3>5. Weitergabe an Dritte</h3><p>Es findet <strong>keine Weitergabe</strong> von Daten an Dritte statt. Keine Tracking-Skripte, keine Analytics, keine Werbung.</p>
         <h3>6. Deine Rechte</h3><p>Da alle Daten lokal verbleiben, hast du die volle Kontrolle:</p><ul><li>Daten einsehen: im Dashboard der Extension</li><li>Daten exportieren: über die Backup-Funktion (JSON-Export)</li><li>Daten löschen: über die Löschfunktion oder durch Deinstallation</li></ul>
         <h3>7. Berechtigungen</h3><p>Die Extension benötigt:</p><ul><li><strong>activeTab:</strong> Zugriff auf den aktiven Tab für das Scraping-Skript</li><li><strong>scripting:</strong> Injektion des Content-Skripts</li><li><strong>storage:</strong> Lokale Speicherung der Bestelldaten</li><li><strong>Host-Zugriff (amazon.de/com/at):</strong> Nur Amazon-Bestellseiten</li></ul>
-        <h3>8. Änderungen</h3><p>Änderungen werden auf dieser Seite veröffentlicht.</p><p style="margin-top:24px;color:var(--text-dim);font-size:.8rem">Stand: März 2026</p>
+        <h3>8. Änderungen</h3><p>Änderungen werden auf dieser Seite veröffentlicht.</p>
+        <h3>9. Nutzungshinweis</h3><p>Diese Extension dient ausschließlich der Analyse deiner eigenen Bestelldaten für persönliche Zwecke. Die Nutzung erfolgt auf eigene Verantwortung. Der Nutzer ist selbst dafür verantwortlich, die jeweils geltenden Nutzungsbedingungen der von ihm genutzten Plattformen einzuhalten. Diese Extension steht in keiner Verbindung zu Amazon und wird von Amazon weder unterstützt noch autorisiert.</p>
+        <p style="margin-top:24px;color:var(--text-dim);font-size:.8rem">Stand: März 2026</p>
       </div>
       <div class="lang-en" style="display:none">
         <h3>1. Controller</h3><p>Falk Scherer<br>Alter Elbdeich 176<br>21217 Seevetal, Germany<br>Email: donate@connos-bg.de</p>
@@ -340,7 +342,9 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
         <h3>5. Third-party sharing</h3><p>There is <strong>no sharing</strong> of data with third parties. No tracking scripts, no analytics, no advertising.</p>
         <h3>6. Your rights</h3><p>Since all data remains locally on your device, you have full control:</p><ul><li>View data: in the extension's dashboard</li><li>Export data: via the backup function (JSON export)</li><li>Delete data: via the delete function or by uninstalling</li></ul>
         <h3>7. Permissions</h3><p>The extension requires:</p><ul><li><strong>activeTab:</strong> Access to the active tab for the scraping script</li><li><strong>scripting:</strong> Content script injection</li><li><strong>storage:</strong> Local storage of order data</li><li><strong>Host access (amazon.de/com/at):</strong> Amazon order pages only</li></ul>
-        <h3>8. Changes</h3><p>Changes will be published on this page.</p><p style="margin-top:24px;color:var(--text-dim);font-size:.8rem">Last updated: March 2026</p>
+        <h3>8. Changes</h3><p>Changes will be published on this page.</p>
+        <h3>9. Usage Notice</h3><p>This extension is intended solely for analyzing your own order data for personal purposes. Use is at your own risk. The user is responsible for complying with the applicable terms of service of the platforms they use. This extension is not affiliated with, endorsed by, or authorized by Amazon.</p>
+        <p style="margin-top:24px;color:var(--text-dim);font-size:.8rem">Last updated: March 2026</p>
       </div>
     </div>
   </div>
@@ -386,7 +390,10 @@ footer .container{display:flex;justify-content:space-between;align-items:center;
 <!-- FOOTER -->
 <footer>
   <div class="container">
-    <span class="footer-text" data-i18n="footer">© 2026 Amazon Ausgaben-Analyse · Alle Daten bleiben lokal.</span>
+    <div>
+      <span class="footer-text" data-i18n="footer">© 2026 Amazon Ausgaben-Analyse · Alle Daten bleiben lokal.</span>
+      <br><span class="footer-text" data-i18n="footer_disc">Nicht verbunden mit Amazon. Nur zur Analyse eigener Bestelldaten für persönliche Zwecke. Nutzung auf eigene Verantwortung.</span>
+    </div>
     <ul class="footer-links">
       <li><a href="#privacy" data-i18n="nav_privacy">Datenschutz</a></li>
       <li><a href="#impressum">Impressum</a></li>
@@ -405,7 +412,7 @@ var T = {
   nav_usecases:'Use Cases', nav_privacy:'Privacy', nav_cta:'Install',
   hero_badge:'100% Local & Private',
   hero_title:'Your Amazon spending.<br><span class="gradient">Finally understood.</span>',
-  hero_sub:'Analyze your Amazon order history right in your browser. Automatic categorization, interactive charts, flexible exports – without a single byte leaving your machine.',
+  hero_sub:'Analyze your own Amazon orders for personal use – right in your browser. Automatic categorization, interactive charts, flexible exports – without a single byte leaving your machine.',
   hero_cta:'Chrome Web Store', hero_cta2:'Discover features ↓',
   ss1:'Screenshot: Dashboard main view with charts',
   trust_local:'100% local processing', trust_cats:'25+ auto-categories', trust_notrack:'No servers, no tracking',
@@ -463,7 +470,8 @@ var T = {
   cta_l:'Get Started', cta_t:'Ready for clarity?',
   cta_d:'Install the extension and start your first analysis in under 2 minutes. Free, private, no registration.',
   cta_btn:'Install from Chrome Web Store', cta_donate:'Support the project',
-  footer:'© 2026 Amazon Spending Analysis · All data stays local.', f_donate:'Donate'
+  footer:'© 2026 Amazon Spending Analysis · All data stays local.',
+  footer_disc:'Not affiliated with Amazon. For personal analysis of your own order data only. Use at your own risk.', f_donate:'Donate'
 };
 
 var curLang='de';

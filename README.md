@@ -98,6 +98,12 @@ Alle Daten werden ausschließlich lokal in deinem Browser gespeichert (`localSto
 
 All data is stored exclusively in your browser (`localStorage` / `chrome.storage.local`). There is **no transmission** to external servers.
 
+## Hinweis / Disclaimer
+
+Diese Extension dient ausschließlich der Analyse deiner eigenen Bestelldaten für persönliche Zwecke. Die Nutzung erfolgt auf eigene Verantwortung. Der Nutzer ist selbst dafür verantwortlich, die jeweils geltenden Nutzungsbedingungen der von ihm genutzten Plattformen einzuhalten. Diese Extension steht in keiner Verbindung zu Amazon und wird von Amazon weder unterstützt noch autorisiert.
+
+This extension is intended solely for analyzing your own order data for personal purposes. Use is at your own risk. The user is responsible for complying with the applicable terms of service of the platforms they use. This extension is not affiliated with, endorsed by, or authorized by Amazon.
+
 ## Spenden / Donate
 
 Wenn dir dieses Tool hilft, freue ich mich über eine freiwillige Unterstützung:

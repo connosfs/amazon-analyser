@@ -1,8 +1,17 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║       Amazon Ausgaben-Analyse / Spending Analysis            ║
-║              Chrome Extension – Version 5.6                  ║
+║              Chrome Extension – Version 5.2                  ║
 ╚══════════════════════════════════════════════════════════════╝
 
+🇩🇪 INSTALLATION (Deutsch)
+═══════════════════════════
+
+1. Entpacke diese ZIP-Datei in einen Ordner deiner Wahl.
+2. Öffne Chrome und navigiere zu: chrome://extensions/
+3. Aktiviere den "Entwicklermodus" (Schalter oben rechts).
+4. Klicke auf "Entpackte Erweiterung laden".
+5. Wähle den Ordner "amazon-extension" aus.
+6. Die Extension erscheint in der Extensions-Leiste.
 
 BENUTZUNG
 ─────────
@@ -15,6 +24,15 @@ BENUTZUNG
 6. Sprache umschalten: DE/EN Buttons oben rechts im Dashboard.
 
 
+🇬🇧 INSTALLATION (English)
+═══════════════════════════
+
+1. Unzip this file to a folder of your choice.
+2. Open Chrome and navigate to: chrome://extensions/
+3. Enable "Developer mode" (toggle in top right).
+4. Click "Load unpacked".
+5. Select the "amazon-extension" folder.
+6. The extension appears in your extensions bar.
 
 USAGE
 ─────

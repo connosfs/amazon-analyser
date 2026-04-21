@@ -1,0 +1,54 @@
+/* Amazon Ausgaben-Analyse v3.7 */
+#amz-ausgaben-panel {
+  --aa-bg: #0E1117; --aa-bg2: #161B22; --aa-bg3: #1C2333;
+  --aa-t1: #E6EDF3; --aa-t2: #9EABBE; --aa-t3: #5E6B80;
+  --aa-accent: #2D9D78;
+  position: fixed; bottom: 20px; right: 20px; z-index: 99999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px; line-height: 1.5; color: var(--aa-t1);
+}
+.aa-card { background: var(--aa-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); width: 360px; overflow: hidden; }
+.aa-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.aa-logo { font-size: 18px; display:flex; align-items:center; }
+.aa-title { font-weight: 700; font-size: 14px; flex: 1; }
+.aa-close { background: none; border: none; color: var(--aa-t3); font-size: 18px; cursor: pointer; padding: 0 4px; }
+.aa-close:hover { color: var(--aa-t1); }
+.aa-body { padding: 14px 16px; background: var(--aa-bg2); }
+
+/* Buttons */
+.aa-btn { display: block; width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 5px; font-family: inherit; transition: all 0.15s; text-align: center; }
+.aa-btn:disabled { opacity: 0.4; cursor: wait; }
+.aa-primary { background: var(--aa-accent); color: #fff; }
+.aa-primary:hover:not(:disabled) { filter: brightness(1.1); }
+.aa-filter-btn { background: #4C9EEB; color: #fff; }
+.aa-filter-btn:hover:not(:disabled) { filter: brightness(1.1); }
+.aa-secondary { background: var(--aa-bg3); color: var(--aa-t2); border: 1px solid rgba(255,255,255,0.06); }
+.aa-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.06); color: var(--aa-t1); }
+
+/* Divider */
+.aa-divider { border-top: 1px solid rgba(255,255,255,0.06); margin: 8px 0; }
+
+/* Year row */
+.aa-yr-row { display: flex; gap: 4px; margin-bottom: 5px; }
+.aa-yr { flex: 1; padding: 7px 2px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.1); background: var(--aa-bg3); color: var(--aa-t3); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; text-align: center; }
+.aa-yr.active { background: #4C9EEB; color: #fff; border-color: #4C9EEB; }
+.aa-yr:hover:not(.active) { background: rgba(255,255,255,0.08); color: var(--aa-t2); }
+.aa-yr-go { background: var(--aa-accent); color: #fff; }
+.aa-yr-go:hover:not(:disabled) { filter: brightness(1.1); }
+
+/* Alle Jahre */
+.aa-all-years { background: linear-gradient(135deg, #4C9EEB, #2D9D78); color: #fff; margin-top: 3px; }
+.aa-all-years:hover:not(:disabled) { filter: brightness(1.1); }
+
+/* Status & progress */
+.aa-status { padding: 10px 12px; border-radius: 8px; font-size: 12px; margin: 8px 0; display: none; line-height: 1.5; }
+.aa-loading { display: block; background: rgba(76,158,235,0.1); color: #4C9EEB; border: 1px solid rgba(76,158,235,0.2); }
+.aa-success { display: block; background: rgba(45,157,120,0.1); color: #2D9D78; border: 1px solid rgba(45,157,120,0.2); }
+.aa-warning { display: block; background: rgba(232,114,58,0.1); color: #E8723A; border: 1px solid rgba(232,114,58,0.2); }
+.aa-bar-bg { background: #1C2333; border-radius: 4px; height: 8px; margin: 8px 0; overflow: hidden; }
+.aa-bar { background: linear-gradient(90deg, #2D9D78, #4C9EEB); height: 100%; border-radius: 4px; transition: width 0.3s; width: 0%; }
+.aa-stored { font-size: 12px; color: var(--aa-t2); padding: 6px 0; }
+
+/* FAB */
+.aa-fab { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: #FF9900; color: white; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(255,153,0,0.4); z-index: 99999; transition: transform 0.2s; }
+.aa-fab:hover { transform: scale(1.1); }

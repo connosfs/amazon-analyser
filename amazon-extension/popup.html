@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:300px;background:#0E1117;color:#E6EDF3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;padding:16px}
+.hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.logo{width:32px;height:32px;border-radius:8px;background:#FF9900;display:flex;align-items:center;justify-content:center;font-size:16px}
+h1{font-size:14px;font-weight:700}
+.sub{font-size:11px;color:#5E6B80}
+.btn{display:block;width:100%;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;font-family:inherit;margin:5px 0;transition:all 0.15s}
+.primary{background:#2D9D78;color:#fff}
+.primary:hover{background:#34b388}
+.secondary{background:#1C2333;color:#9EABBE;border:1px solid rgba(255,255,255,0.06)}
+.secondary:hover{background:rgba(255,255,255,0.08)}
+.info{font-size:11px;color:#5E6B80;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+  <div class="hdr">
+    <div class="logo"><svg width="18" height="18" viewBox="0 0 128 128"><rect x="18" y="76" width="22" height="38" rx="6" fill="#fff"/><rect x="48" y="54" width="22" height="60" rx="6" fill="#fff" opacity=".88"/><rect x="78" y="30" width="22" height="84" rx="6" fill="#fff" opacity=".72"/></svg></div>
+    <div><h1 id="title">Amazon Ausgaben</h1><div class="sub">v5.8</div></div>
+  </div>
+
+  <a class="btn primary" id="orderLink" href="https://www.amazon.de/gp/your-account/order-history" target="_blank">📦 Bestellübersicht öffnen</a>
+  <button class="btn secondary" id="openDashboard">📊 Analyse-Dashboard</button>
+
+  <div class="info" id="instructions"></div>
+
+  <a class="btn secondary" id="donateLink" href="https://www.paypal.com/donate/?hosted_button_id=LBAGVGGLPXMYQ" target="_blank" rel="noopener" style="margin-top:10px;text-decoration:none;background:linear-gradient(135deg,rgba(232,93,117,0.15),rgba(76,158,235,0.15));border-color:rgba(232,93,117,0.3);color:#E85D75" id="donateBtn">❤️</a>
+
+  <script src="popup.js"></script>
+</body>
+</html>
